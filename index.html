@@ -1,1 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For Marcus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Dancing+Script:wght@500&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --gold: #d4af37; 
+            --apple-border: rgba(255, 255, 255, 0.2);
+        }
 
+        body, html { 
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            overflow: hidden; background-color: #000; 
+            font-family: -apple-system, sans-serif; 
+            color: white; user-select: none;
+        }
+
+        .book-container { 
+            position: relative; width: 100vw; height: 100vh; 
+            perspective: 2000px; display: flex; align-items: center; justify-content: center; 
+        }
+
+        .book { 
+            position: relative; 
+            width: 90%; max-width: 420px; 
+            height: 85%; max-height: 750px; 
+            transform-style: preserve-3d; 
+        }
+
+        @media (min-width: 1024px) { .book { width: 30%; height: 80%; } }
+
+        .page {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            background: linear-gradient(135deg, rgba(45, 45, 45, 0.85), rgba(10, 10, 10, 0.98));
+            backdrop-filter: blur(35px); -webkit-backdrop-filter: blur(35px);
+            border: 1px solid var(--apple-border);
+            border-radius: 0 25px 25px 0;
+            transform-origin: left; transition: transform 1.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+            backface-visibility: hidden; display: flex; flex-direction: column; align-items: center; 
+            padding: 20px; box-sizing: border-box; overflow-y: auto;
+        }
+
+        .page.flipped { transform: rotateY(-175deg); }
+
+        /* Page 1: Cover */
+        #page1 { z-index: 10; justify-content: center; text-align: center; }
+        .marcus-name { color: var(--gold); font-family: 'Dancing Script'; font-size: 3em; margin-bottom: 15px; }
+        .bro-gift { font-family: 'Fredoka One'; color: yellow; font-size: 2em; }
+
+        /* Page 2: Text & Peel */
+        #page2 { z-index: 9; }
+        #birthdayText { 
+            font-family: 'Dancing Script'; font-size: 1.5em; text-align: center; 
+            line-height: 2.2; margin: 30px 0; padding: 0 15px; letter-spacing: 1.5px; 
+        }
+        .word-span { display: inline-block; margin-right: 15px; opacity: 0; transition: opacity 0.8s; } 
+        .pull-container { position: relative; width: 100%; height: 80px; perspective: 1000px; border-radius: 12px; overflow: hidden; margin-top: auto; border: 1px solid var(--apple-border); }
+        .secret-bg { position: absolute; top:0; left:0; width:100%; height:100%; background:#fff; display:flex; align-items:center; justify-content:center; color:#000; font-weight:bold; padding:15px; font-size: 0.8em; text-align:center; font-family: sans-serif; box-sizing: border-box; }
+        .paper-cover { position: absolute; top:0; right:0; width:100%; height:100%; background: linear-gradient(135deg, var(--gold), #b59410); transform-origin: right; transition: transform 0.1s linear; z-index:2; display:flex; align-items:center; justify-content:flex-end; padding-right:15px; color: #000; font-family: sans-serif; font-weight: bold; }
+
+        /* Page 3: Photo Album (With Google Drive Link) */
+        #page3 { z-index: 8; }
+        .photo-frame {
+            width: 100%;
+            height: auto;
+            aspect-ratio: 16/9;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--apple-border);
+            border-radius: 20px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 30px 0;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Page 4: Contract & Ticket */
+        #page4 { z-index: 7; }
+        .ticket { width: 100%; background: rgba(255, 255, 255, 0.05); border: 1px solid var(--apple-border); border-radius: 12px; padding: 12px; margin: 10px 0; font-family: sans-serif; }
+        .city { font-weight: bold; font-size: 1.2em; color: var(--gold); }
+        .contract-box { width: 100%; background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 12px; border-left: 4px solid var(--gold); margin: 8px 0; text-align: left; font-size: 0.8em; line-height: 1.6; }
+        .sign-area { width: 100%; text-align: center; margin-top: 10px; }
+        #signature-pad { background: white; border-radius: 10px; width: 100%; max-width: 300px; height: 110px; touch-action: none; border: 2px solid var(--gold); }
+        .clear-btn { background: #ff4444; color: white; border: none; padding: 6px 15px; border-radius: 10px; font-size: 0.75em; cursor: pointer; margin-top: 8px; font-weight: bold; }
+
+        .next-btn {
+            background: rgba(255, 255, 255, 0.1); border: 1px solid var(--apple-border); backdrop-filter: blur(10px);
+            color: var(--gold); padding: 12px 35px; border-radius: 15px; font-weight: bold; cursor: pointer; margin-top: auto;
+        }
+    </style>
+</head>
+<body>
+
+<div class="book-container">
+    <div class="book">
+        
+        <div class="page" id="page1">
+            <div class="marcus-name">To Marcus Cheung</div>
+            <div class="bro-gift">From Your Bro Gift</div>
+            <button class="next-btn" onclick="nextPage(1)">Open Book</button>
+        </div>
+
+        <div class="page" id="page2">
+            <div id="birthdayText"></div>
+            <div class="pull-container" id="pullContainer">
+                <div class="secret-bg">You're my BFF forever! Stay amazing always! ❤️</div>
+                <div class="paper-cover" id="paperCover">👈 Pull to Reveal</div>
+            </div>
+            <button class="next-btn" onclick="nextPage(2)">Next Page</button>
+        </div>
+
+        <div class="page" id="page3">
+            <h3 style="font-family: 'Fredoka One'; color: var(--gold); margin: 10px 0 0 0;">Our Memories</h3>
+            <div class="photo-frame">
+                <img src="https://lh3.googleusercontent.com/d/1W7Csk4T5G6DEgGkYsZIPFsbATxY-ETzS" alt="Marcus & Bro">
+            </div>
+            <p style="font-family: 'Dancing Script'; font-size: 1.4em; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.5);">True friendship never ends.</p>
+            <button class="next-btn" onclick="nextPage(3)">Next Page</button>
+        </div>
+
+        <div class="page" id="page4">
+            <div style="font-family: 'Fredoka One'; color: var(--gold); font-size: 1.1em; text-align: center;">2027 Promise:<br>Keep doing best bro</div>
+            <div class="ticket">
+                <div style="color: #006041; font-weight: bold; font-size: 0.6em;">CATHAY PACIFIC | BUSINESS</div>
+                <div style="display:flex; justify-content: space-between; margin: 5px 0;">
+                    <span class="city">HKG</span> ✈️ <span class="city">TYO</span>
+                </div>
+                <div style="font-size: 0.65em; opacity: 0.8;">Seats: 1A (Bro 1) | 1B (Marcus)</div>
+            </div>
+            <div class="contract-box">
+                <div style="color: var(--gold); font-weight: bold;">Bro 承諾書:</div>
+                • Can not leave for a girl.<br>
+                • Can not leave because of parents.<br>
+                • Can not leave for no reason.<br>
+                <div style="text-align:center; color:yellow; font-weight:bold;">BRO FOREVER</div>
+            </div>
+            <div class="sign-area">
+                <canvas id="signature-pad"></canvas><br>
+                <button class="clear-btn" onclick="clearSign()">Clear Signature</button>
+                <p style="font-size: 0.6em; color: var(--gold); margin-top: 5px;">Marcus, sign here to accept</p>
+            </div>
+            <button class="next-btn" onclick="alert('Agreement Sealed! Happy Birthday Marcus!')">Finish</button>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    let typingStarted = false;
+
+    function nextPage(p) {
+        document.getElementById('page' + p).classList.add('flipped');
+        if (p === 1) setTimeout(startTyping, 1000);
+        if (p === 3) {
+            setTimeout(resizeCanvas, 500);
+        }
+    }
+
+    function startTyping() {
+        if (typingStarted) return;
+        typingStarted = true;
+        const text = "Happy Birthday, Marcus! You’re my BFF, and I hope this new year brings you lots of happiness and great memories.";
+        const container = document.getElementById('birthdayText');
+        text.split(" ").forEach((word, i) => {
+            const span = document.createElement('span');
+            span.innerText = word;
+            span.className = 'word-span';
+            container.appendChild(span);
+            setTimeout(() => span.style.opacity = "1", i * 300);
+        });
+    }
+
+    /* --- Signature Pad Logic --- */
+    const canvas = document.getElementById('signature-pad');
+    const ctx = canvas.getContext('2d');
+    let writing = false;
+
+    function resizeCanvas() {
+        const ratio = Math.max(window.devicePixelRatio || 1, 1);
+        canvas.width = canvas.offsetWidth * ratio;
+        canvas.height = canvas.offsetHeight * ratio;
+        ctx.scale(ratio, ratio);
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2.5;
+        ctx.lineCap = "round";
+    }
+
+    function getMousePos(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    function startDraw(e) {
+        writing = true;
+        const pos = getMousePos(e);
+        ctx.beginPath();
+        ctx.moveTo(pos.x, pos.y);
+        if (e.type === 'touchstart') e.preventDefault();
+    }
+
+    function moveDraw(e) {
+        if (!writing) return;
+        const pos = getMousePos(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+        if (e.type === 'touchmove') e.preventDefault();
+    }
+
+    canvas.addEventListener('mousedown', startDraw);
+    canvas.addEventListener('mousemove', moveDraw);
+    window.addEventListener('mouseup', () => writing = false);
+    canvas.addEventListener('touchstart', startDraw, {passive: false});
+    canvas.addEventListener('touchmove', moveDraw, {passive: false});
+    window.addEventListener('touchend', () => writing = false);
+
+    function clearSign() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+
+    /* --- Paper Reveal Logic --- */
+    const pullContainer = document.getElementById('pullContainer');
+    const paperCover = document.getElementById('paperCover');
+    let dragging = false;
+
+    function doPull(e) {
+        if (!dragging) return;
+        const rect = pullContainer.getBoundingClientRect();
+        const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+        let percent = (rect.width - x) / rect.width;
+        percent = Math.min(Math.max(percent, 0), 1);
+        paperCover.style.transform = `rotateY(${percent * -115}deg)`;
+    }
+
+    pullContainer.addEventListener('mousedown', () => dragging = true);
+    pullContainer.addEventListener('touchstart', () => dragging = true);
+    window.addEventListener('mousemove', doPull);
+    window.addEventListener('touchmove', doPull, {passive: false});
+    window.addEventListener('mouseup', () => dragging = false);
+    window.addEventListener('touchend', () => dragging = false);
+</script>
+</body>
+</html>
